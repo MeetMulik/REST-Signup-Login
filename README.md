@@ -13,7 +13,7 @@ A simple RESTful API built using Node.js, MongoDB, Express, and JWT for user aut
 
 ## Introduction
 
-Briefly describe your API and its purpose.
+A simple RESTful API built using Node.js, MongoDB, Express, and JWT for user authentication and management.
 
 ## Features
 
