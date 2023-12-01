@@ -180,4 +180,67 @@ const resetPassword = async (req, res) => {
   } catch (error) {}
 };
 
-export { signupUser, loginUser, logoutUser, forgetPassword, resetPassword };
+const getUserProfile = async (req, res) => {
+  const username = req.params.username;
+  try {
+    let user = await User.findOne({ username })
+      .select("-password")
+      .select("-resetToken")
+      .select("-updatedAt");
+
+    if (!user) return res.status(404).json({ error: "User not found" });
+    res.status(200).json(user);
+  } catch (error) {
+    console.log("[GET USER PROFILE ERROR]", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateUserProfile = async (req, res) => {
+  try {
+    const values = req.body;
+    const currentUserId = req.user._id;
+
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    if (req.params.id != currentUserId.toString()) {
+      return res
+        .status(400)
+        .json({ message: "You cannot update other user's profile" });
+    }
+
+    if (values.password) {
+      const { password } = values;
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        { $set: { password: hashedPassword } },
+        { new: true }
+      );
+      return res.status(200).json(updatedUser);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: req.params.id },
+      { $set: values },
+      { new: true }
+    );
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.log("[UPDATE USER PROFILE ERROR]", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export {
+  signupUser,
+  loginUser,
+  logoutUser,
+  forgetPassword,
+  resetPassword,
+  getUserProfile,
+  updateUserProfile,
+};
