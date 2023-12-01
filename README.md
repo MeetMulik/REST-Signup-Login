@@ -21,6 +21,11 @@ A simple RESTful API built using Node.js, MongoDB, Express, and JWT for user aut
 - User authentication (login)
 - User logout
 - Password reset functionality
+- View & Update user profile
+- Create Posts - (Create, Read, Update, Delete) Posts
+- Add comments on posts
+- Delete comments
+- Like/Unlike Posts
 
 ## Prerequisites
 
@@ -65,10 +70,6 @@ npm run dev
 ```
 
 ## API Endpoints
-
-### Swagger Docs
-
-To view the Swagger documentation for the API, navigate to [http://localhost:5000/api-docs/](http://localhost:5000/api-docs/) after starting the application.
 
 All post-related routes are prefixed with `/api/users`.
 
@@ -251,7 +252,7 @@ All post-related routes are prefixed with `/api/posts`.
 - **Description:** Deletes a comment associated with a post.
 - **Middleware:** `protectRoute`
 
-### 7. Like/Unlike Post
+### 8. Like/Unlike Post
 
 - **Method:** PUT
 - **Endpoint:** `/like/:postId`
