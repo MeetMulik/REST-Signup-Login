@@ -195,6 +195,31 @@ const deleteComment = async (req, res) => {
   }
 };
 
+const likeUnlikePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const userId = req.user._id;
+    const post = await Post.findById({ _id: postId });
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const userLikedPost = post.likes.includes(userId);
+    if (userLikedPost) {
+      await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
+      res.status(200).json({ message: "Post unliked successfully" });
+    } else {
+      post.likes.push(userId);
+      await post.save();
+      res.status(200).json({ message: "Post liked successfully" });
+    }
+  } catch (error) {
+    console.log("[LIKE UNLIKE POST ERROR]", error.message);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export {
   createPost,
   updatePost,
@@ -204,4 +229,5 @@ export {
   getPostsByUserId,
   addComment,
   deleteComment,
+  likeUnlikePost,
 };
