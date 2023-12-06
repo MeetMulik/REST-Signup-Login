@@ -181,6 +181,8 @@ const resetPassword = async (req, res) => {
 };
 
 const getUserProfile = async (req, res) => {
+  const currentUser = req.user;
+  if (!currentUser) return res.status(401).json({ message: "Unauthorized" });
   const username = req.params.username;
   try {
     let user = await User.findOne({ username })
