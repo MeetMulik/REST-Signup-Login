@@ -18,7 +18,7 @@ A simple RESTful API built using Node.js, MongoDB, Express, and JWT for user aut
 ## Features
 
 - User registration (signup)
-- User authentication (login)
+- User authentication using JWT (login)
 - User logout
 - Password reset functionality
 - View & Update user profile
